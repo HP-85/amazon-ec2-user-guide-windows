@@ -15,7 +15,7 @@ Receive side scaling \(RSS\) is used to distribute network traffic CPU load acro
 
 Windows is hyper\-thread aware and will ensure the RSS queues of a single NIC are always placed on different physical cores\. Therefore, unless hyper\-threading is disabled, in order to completely prevent contention with other NICs, spread the RSS configuration of each NIC between a range of 16 logical processors\. The `Set-NetAdapterRss` cmdlt allows you to define the per\-NIC range of valid logical processors by defining the values of BaseProcessorGroup, BaseProcessorNumber, MaxProcessingGroup, MaxProcessorNumber, and NumaNode \(optional\)\. If there are not enough physical cores to completely eliminate inter\-NIC contention, minimize the overlapping ranges or reduce the number of logical processors in the ENI ranges depending on the expected workload of the ENI \(in other words, a low volume admin network ENI may not need as many RSS queues assigned\)\. Also, as noted above, various components must run on CPU 0, and therefore we recommend excluding it from all RSS configurations when sufficient vCPUs are available\. 
 
-For example, when there are three ENIs on a 72 vCPU instance with 2 NUMA nodes with hyper\-threading enabled, the following commands spread the network load between the two CPUs without overlap and preventthe use of core 0 completely\. 
+For example, when there are three ENIs on a 72 vCPU instance with 2 NUMA nodes with hyper\-threading enabled, the following commands spread the network load between the two CPUs without overlap and prevent the use of core 0 completely\. 
 
 ```
 Set-NetAdapterRss -Name NIC1 -BaseProcessorGroup 0 -BaseProcessorNumber 2 -MaxProcessorNumber 16 
